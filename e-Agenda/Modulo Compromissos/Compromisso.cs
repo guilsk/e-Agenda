@@ -11,13 +11,13 @@ namespace e_Agenda.Modulo_Compromissos
     public class Compromisso : EntidadeBase
     {
         public string assunto;
-        public string data;
-        public string inicio;
-        public string termino;
-        public string contato;
+        public DateTime data;
+        public TimeSpan inicio;
+        public TimeSpan termino;
+        public Contato contato;
         public string local;
 
-        public Compromisso(string assunto, string data, string inicio, string termino, string contato, string local)
+        public Compromisso(string assunto, DateTime data, TimeSpan inicio, TimeSpan termino, Contato contato, string local)
         {
             this.assunto = assunto;
             this.data = data;
@@ -27,9 +27,18 @@ namespace e_Agenda.Modulo_Compromissos
             this.local = local;
         }
 
+        public Compromisso(string assunto, DateTime data, TimeSpan inicio, TimeSpan termino, string local)
+        {
+            this.assunto = assunto;
+            this.data = data;
+            this.inicio = inicio;
+            this.termino = termino;
+            this.local = local;
+        }
+
         public override string ToString()
         {
-            return "Id: " + id + ", " + assunto + ", " + data + ", Local: " + local;
+            return "Id: " + id + ", " + assunto + ", " + (data + inicio) + ", Local: " + local;
         }
     }
 }

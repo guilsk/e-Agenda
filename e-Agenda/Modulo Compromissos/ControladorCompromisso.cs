@@ -12,11 +12,13 @@ namespace e_Agenda.ModuloCompromisso
     public class ControladorCompromisso : ControladorBase
     {
         private RepositorioCompromisso repositorioCompromisso;
-        private ListagemCompromissoControl listagemCompromisso;
+        private RepositorioContato repositorioContato;
+        private ListagemCompromissoControl listagemCompromisso = new();
 
-        public ControladorCompromisso(RepositorioCompromisso repositorioCompromisso)
+        public ControladorCompromisso(RepositorioCompromisso repositorioCompromisso, RepositorioContato repositorioContato)
         {
             this.repositorioCompromisso = repositorioCompromisso;
+            this.repositorioContato = repositorioContato;
         }
 
         public override string ToolTipInserir { get { return "Inserir novo Compromisso"; } }
@@ -24,10 +26,10 @@ namespace e_Agenda.ModuloCompromisso
         public override string ToolTipEditar { get { return "Editar um Compromisso existente"; } }
 
         public override string ToolTipExcluir { get { return "Editar um Compromisso existente"; } }
-        
+
         public override void Inserir()
         {
-            TelaCompromissoForm telaCompromisso = new();
+            TelaCompromissoForm telaCompromisso = new(repositorioContato.SelecionarTodos());
 
             DialogResult opcaoEscolhida = telaCompromisso.ShowDialog();
 
@@ -55,7 +57,7 @@ namespace e_Agenda.ModuloCompromisso
                 return;
             }
 
-            TelaCompromissoForm telaCompromisso = new TelaCompromissoForm();
+            TelaCompromissoForm telaCompromisso = new TelaCompromissoForm(repositorioContato.SelecionarTodos());
             telaCompromisso.Compromisso = compromisso;
 
             DialogResult opcaoEscolhida = telaCompromisso.ShowDialog();
@@ -93,6 +95,10 @@ namespace e_Agenda.ModuloCompromisso
             }
         }
 
+        public override void Filtrar()
+        {
+            throw new NotImplementedException();
+        }
 
         private void CarregarCompromissos()
         {

@@ -86,6 +86,11 @@ namespace e_Agenda.ModuloContato
             }
         }
 
+        public override void Filtrar()
+        {
+            throw new NotImplementedException();
+        }
+
         private void CarregarContatos()
         {
             List<Contato> contatos = repositorioContato.SelecionarTodos();

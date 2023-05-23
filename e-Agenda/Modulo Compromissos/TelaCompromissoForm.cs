@@ -1,4 +1,5 @@
-﻿using System;
+﻿using e_Agenda.ModuloContato;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,9 +15,23 @@ namespace e_Agenda.Modulo_Compromissos
     {
         private Compromisso compromisso;
 
-        public TelaCompromissoForm()
+        private List<Contato> contatos;
+
+        public TelaCompromissoForm(List<Contato> contatos)
         {
             InitializeComponent();
+
+            this.contatos = contatos;
+
+            AdicionaItensComboBox(contatos);
+        }
+
+        private void AdicionaItensComboBox(List<Contato> contatos)
+        {
+            foreach (Contato item in contatos)
+            {
+                comboBox_contato.Items.Add(item.nome);
+            }
         }
 
         public Compromisso Compromisso
@@ -25,10 +40,10 @@ namespace e_Agenda.Modulo_Compromissos
             {
                 tf_id.Text = value.id.ToString();
                 tf_assunto.Text = value.assunto;
-                dtp_data.Text = value.data;
-                dtp_inicio.Text = value.inicio;
-                dtp_termino.Text = value.termino;
-                comboBox_contato.Text = value.contato;
+                dtp_data.Text = value.data.ToString();
+                dtp_inicio.Text = value.inicio.ToString();
+                dtp_termino.Text = value.termino.ToString();
+                comboBox_contato.Text = value.contato.ToString();
                 tf_local.Text = value.local;
             }
             get
@@ -41,17 +56,37 @@ namespace e_Agenda.Modulo_Compromissos
         {
             string assunto = tf_assunto.Text;
 
-            string data = dtp_data.Text;
+            DateTime data = dtp_data.Value;
 
-            string inicio = dtp_inicio.Text;
+            TimeSpan inicio = dtp_inicio.Value.TimeOfDay;
 
-            string termino = dtp_termino.Text;
+            TimeSpan termino = dtp_termino.Value.TimeOfDay;
 
-            string contato = comboBox_contato.Text;
+            string local;
 
-            string local = tf_local.Text;
+            if (rb_presencial.Checked)
+                local = "Presencial: " + tf_local.Text;
+            else
+                local = "Remoto: " + tf_local.Text;
 
-            compromisso = new(assunto, data, inicio, termino, contato, local);
+            Contato contato;
+
+            if (checkBox_compromisso.Checked)
+            {
+                string nomeDoContato = comboBox_contato.Text;
+
+                foreach (Contato c in contatos)
+                    if (c.nome == nomeDoContato)
+                    {
+                        contato = c;
+                        compromisso = new(assunto, data, inicio, termino, contato, local);
+                        break;
+                    }
+            }
+            else
+            {
+                compromisso = new(assunto, data, inicio, termino, local);
+            }
 
             if (tf_id.Text != "0")
                 compromisso.id = Convert.ToInt32(tf_id.Text);

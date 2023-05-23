@@ -37,7 +37,6 @@
             checkBox_compromisso = new CheckBox();
             rb_remoto = new RadioButton();
             rb_presencial = new RadioButton();
-            label7 = new Label();
             tf_id = new TextBox();
             tf_assunto = new TextBox();
             tf_local = new TextBox();
@@ -47,6 +46,8 @@
             comboBox_contato = new ComboBox();
             bt_cancelar = new Button();
             bt_salvar = new Button();
+            groupBox1 = new GroupBox();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -117,7 +118,7 @@
             // rb_remoto
             // 
             rb_remoto.AutoSize = true;
-            rb_remoto.Location = new Point(96, 339);
+            rb_remoto.Location = new Point(25, 27);
             rb_remoto.Name = "rb_remoto";
             rb_remoto.Size = new Size(70, 19);
             rb_remoto.TabIndex = 7;
@@ -128,22 +129,13 @@
             // rb_presencial
             // 
             rb_presencial.AutoSize = true;
-            rb_presencial.Location = new Point(96, 368);
+            rb_presencial.Location = new Point(101, 27);
             rb_presencial.Name = "rb_presencial";
             rb_presencial.Size = new Size(81, 19);
             rb_presencial.TabIndex = 8;
             rb_presencial.TabStop = true;
             rb_presencial.Text = "Presencial:";
             rb_presencial.UseVisualStyleBackColor = true;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(73, 301);
-            label7.Name = "label7";
-            label7.Size = new Size(71, 15);
-            label7.TabIndex = 9;
-            label7.Text = "Localização:";
             // 
             // tf_id
             // 
@@ -161,7 +153,7 @@
             // 
             // tf_local
             // 
-            tf_local.Location = new Point(172, 338);
+            tf_local.Location = new Point(25, 52);
             tf_local.Name = "tf_local";
             tf_local.Size = new Size(378, 23);
             tf_local.TabIndex = 12;
@@ -180,8 +172,10 @@
             // 
             dtp_inicio.CustomFormat = "HH:mm";
             dtp_inicio.Format = DateTimePickerFormat.Custom;
+            dtp_inicio.ImeMode = ImeMode.NoControl;
             dtp_inicio.Location = new Point(73, 181);
             dtp_inicio.Name = "dtp_inicio";
+            dtp_inicio.ShowUpDown = true;
             dtp_inicio.Size = new Size(200, 23);
             dtp_inicio.TabIndex = 15;
             dtp_inicio.Value = new DateTime(2023, 5, 18, 17, 15, 0, 0);
@@ -192,9 +186,10 @@
             dtp_termino.Format = DateTimePickerFormat.Custom;
             dtp_termino.Location = new Point(361, 181);
             dtp_termino.Name = "dtp_termino";
+            dtp_termino.ShowUpDown = true;
             dtp_termino.Size = new Size(200, 23);
             dtp_termino.TabIndex = 16;
-            dtp_termino.Value = new DateTime(2023, 5, 18, 17, 59, 0, 0);
+            dtp_termino.Value = new DateTime(2023, 5, 23, 17, 59, 0, 0);
             // 
             // comboBox_contato
             // 
@@ -226,23 +221,32 @@
             bt_salvar.UseVisualStyleBackColor = true;
             bt_salvar.Click += bt_salvar_Click;
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(tf_local);
+            groupBox1.Controls.Add(rb_presencial);
+            groupBox1.Controls.Add(rb_remoto);
+            groupBox1.Location = new Point(66, 301);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(439, 98);
+            groupBox1.TabIndex = 20;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Localização";
+            // 
             // TelaCompromissoForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(586, 479);
+            ClientSize = new Size(586, 523);
+            Controls.Add(groupBox1);
             Controls.Add(bt_cancelar);
             Controls.Add(bt_salvar);
             Controls.Add(comboBox_contato);
             Controls.Add(dtp_termino);
             Controls.Add(dtp_inicio);
             Controls.Add(dtp_data);
-            Controls.Add(tf_local);
             Controls.Add(tf_assunto);
             Controls.Add(tf_id);
-            Controls.Add(label7);
-            Controls.Add(rb_presencial);
-            Controls.Add(rb_remoto);
             Controls.Add(checkBox_compromisso);
             Controls.Add(label6);
             Controls.Add(label5);
@@ -252,6 +256,8 @@
             Controls.Add(label1);
             Name = "TelaCompromissoForm";
             Text = "TelaCompromissoForm";
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -267,7 +273,6 @@
         private CheckBox checkBox_compromisso;
         private RadioButton rb_remoto;
         private RadioButton rb_presencial;
-        private Label label7;
         private TextBox tf_id;
         private TextBox tf_assunto;
         private TextBox tf_local;
@@ -277,5 +282,6 @@
         private ComboBox comboBox_contato;
         private Button bt_cancelar;
         private Button bt_salvar;
+        private GroupBox groupBox1;
     }
 }

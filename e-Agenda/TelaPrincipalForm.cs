@@ -1,4 +1,5 @@
 using e_Agenda.Compartilhado;
+using e_Agenda.Modulo_Compromissos;
 using e_Agenda.ModuloCompromisso;
 using e_Agenda.ModuloContato;
 using e_Agenda.ModuloTarefas;
@@ -8,6 +9,8 @@ namespace e_Agenda
     public partial class TelaPrincipalForm : Form
     {
         private ControladorBase controlador;
+        private RepositorioContato repositorioContato = new();
+        private RepositorioCompromisso repositorioCompromisso = new();
 
         public TelaPrincipalForm()
         {
@@ -15,14 +18,14 @@ namespace e_Agenda
         }
         private void MenuItemContato_Click(object sender, EventArgs e)
         {
-            controlador = new ControladorContato(new());
+            controlador = new ControladorContato(repositorioContato);
 
             ConfigurarTelaPrincipal(controlador);
         }
 
         private void MenuItemCompromisso_Click(object sender, EventArgs e)
         {
-            controlador = new ControladorCompromisso(new());
+            controlador = new ControladorCompromisso(repositorioCompromisso, repositorioContato);
 
             ConfigurarTelaPrincipal(controlador);
         }

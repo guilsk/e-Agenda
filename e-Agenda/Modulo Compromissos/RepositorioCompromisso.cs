@@ -9,7 +9,7 @@ namespace e_Agenda.Modulo_Compromissos
 {
     public class RepositorioCompromisso
     {
-        List<Compromisso> compromissos = new();
+        private List<Compromisso> compromissos = new();
         private static int contador;
 
         public void Inserir(Compromisso compromisso)
@@ -32,15 +32,12 @@ namespace e_Agenda.Modulo_Compromissos
             compromissoSelecionado.data = compromisso.data;
             compromissoSelecionado.inicio = compromisso.inicio;
             compromissoSelecionado.termino = compromisso.termino;
-            if(compromisso.contato != null)
+            if (compromisso.contato != null)
                 compromissoSelecionado.contato = compromisso.contato;
             compromissoSelecionado.local = compromisso.local;
         }
 
-        private Compromisso SelecionarPorId(int id)
-        {
-            return compromissos.FirstOrDefault(x => x.id == id);
-        }
+        private Compromisso SelecionarPorId(int id) => compromissos.FirstOrDefault(x => x.id == id);
 
         public void Excluir(Compromisso compromisso)
         {

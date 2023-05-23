@@ -20,6 +20,8 @@ namespace e_Agenda.Compartilhado
 
         public abstract void Excluir();
 
+        public abstract void Filtrar();
+
         public abstract UserControl ObterListagem();
 
         public abstract string ObterTipoCadastro();
