@@ -1,6 +1,4 @@
-﻿using e_Agenda.Compartilhado;
-
-namespace e_Agenda.ModuloContato
+﻿namespace e_Agenda.ModuloContato
 {
     public class ControladorContato : ControladorBase
     {
@@ -40,10 +38,7 @@ namespace e_Agenda.ModuloContato
 
             if (contato == null)
             {
-                MessageBox.Show($"Selecione um contato primeiro!",
-                    "Edição de Contatos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                MessageBox.Show($"Selecione um contato primeiro!", "Edição de Contatos", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 return;
             }
@@ -55,7 +50,7 @@ namespace e_Agenda.ModuloContato
 
             if (opcaoEscolhida == DialogResult.OK)
             {
-                repositorioContato.Editar(telaContato.Contato);
+                repositorioContato.Editar(telaContato.Contato.id, telaContato.Contato);
 
                 CarregarContatos();
             }
@@ -67,10 +62,7 @@ namespace e_Agenda.ModuloContato
 
             if (contato == null)
             {
-                MessageBox.Show($"Selecione um contato primeiro!",
-                    "Exclusão de Contatos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                MessageBox.Show($"Selecione um contato primeiro!", "Exclusão de Contatos", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 return;
             }
@@ -84,11 +76,6 @@ namespace e_Agenda.ModuloContato
 
                 CarregarContatos();
             }
-        }
-
-        public override void Filtrar()
-        {
-            throw new NotImplementedException();
         }
 
         private void CarregarContatos()

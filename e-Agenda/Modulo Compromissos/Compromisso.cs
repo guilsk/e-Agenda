@@ -1,44 +1,91 @@
-﻿using e_Agenda.Compartilhado;
-using e_Agenda.ModuloContato;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using e_Agenda.ModuloContato;
 
 namespace e_Agenda.Modulo_Compromissos
 {
-    public class Compromisso : EntidadeBase
+    public class Compromisso : EntidadeBase<Compromisso>
     {
         public string assunto;
         public DateTime data;
-        public TimeSpan inicio;
-        public TimeSpan termino;
+        public TimeSpan horarioInicio;
+        public TimeSpan horarioFinal;
         public Contato contato;
-        public string local;
+        public string localPresencial;
+        public string localOnline;
+        public TipoLocalEnum tipoLocal;
 
-        public Compromisso(string assunto, DateTime data, TimeSpan inicio, TimeSpan termino, Contato contato, string local)
+        public Compromisso(string assunto, DateTime data, TimeSpan horarioInicio, TimeSpan horarioFinal, Contato contato, string local, TipoLocalEnum tipoLocal)
         {
             this.assunto = assunto;
             this.data = data;
-            this.inicio = inicio;
-            this.termino = termino;
+            this.horarioInicio = horarioInicio;
+            this.horarioFinal = horarioFinal;
             this.contato = contato;
-            this.local = local;
+            this.tipoLocal = tipoLocal;
+
+            if (tipoLocal == TipoLocalEnum.Online)
+                this.localOnline = local;
+            else
+                this.localPresencial = local;
         }
 
-        public Compromisso(string assunto, DateTime data, TimeSpan inicio, TimeSpan termino, string local)
+        public Compromisso(int id, string assunto, DateTime data, TimeSpan horarioInicio, TimeSpan horarioFinal, Contato contato, string local, TipoLocalEnum tipoLocal)
         {
+            this.id = id;
             this.assunto = assunto;
             this.data = data;
-            this.inicio = inicio;
-            this.termino = termino;
-            this.local = local;
+            this.horarioInicio = horarioInicio;
+            this.horarioFinal = horarioFinal;
+            this.contato = contato;
+            this.tipoLocal = tipoLocal;
+
+            if (tipoLocal == TipoLocalEnum.Online)
+                this.localOnline = local;
+            else
+                this.localPresencial = local;
         }
 
         public override string ToString()
         {
-            return "Id: " + id + ", " + assunto + ", " + (data + inicio) + ", Local: " + local;
+            return "Id: " + id + ", " + assunto + ", Data: " + data;
+        }
+
+        public override void AtualizarInformacoes(Compromisso registroAtualizado)
+        {
+            this.assunto = registroAtualizado.assunto;
+            this.data = registroAtualizado.data;
+            this.horarioInicio = registroAtualizado.horarioInicio;
+            this.horarioFinal = registroAtualizado.horarioFinal;
+            this.contato = registroAtualizado.contato;
+            this.tipoLocal = registroAtualizado.tipoLocal;
+
+            if (registroAtualizado.tipoLocal == TipoLocalEnum.Online)
+                this.localOnline = registroAtualizado.localOnline;
+            else
+                this.localPresencial = registroAtualizado.localPresencial;
+        }
+
+        public override string[] Validar()
+        {
+            List<string> erros = new List<string>();
+
+            if (string.IsNullOrEmpty(assunto))
+                erros.Add("O campo 'assunto' é obrigatório");
+
+            return erros.ToArray();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Compromisso compromisso
+                   && id == compromisso.id
+                   && assunto == compromisso.assunto
+                   && data == compromisso.data
+                   && horarioInicio.Equals(compromisso.horarioInicio)
+                   && horarioFinal.Equals(compromisso.horarioFinal)
+                   && EqualityComparer<Contato>.Default.Equals(contato, compromisso.contato)
+                   && localPresencial == compromisso.localPresencial
+                   && localOnline == compromisso.localOnline
+                   && tipoLocal == compromisso.tipoLocal;
         }
     }
 }

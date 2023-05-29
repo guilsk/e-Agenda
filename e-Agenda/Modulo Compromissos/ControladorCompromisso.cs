@@ -1,41 +1,40 @@
-﻿using e_Agenda.Compartilhado;
-using e_Agenda.Modulo_Compromissos;
+﻿using e_Agenda.Modulo_Compromissos;
 using e_Agenda.ModuloContato;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace e_Agenda.ModuloCompromisso
 {
     public class ControladorCompromisso : ControladorBase
     {
-        private RepositorioCompromisso repositorioCompromisso;
         private RepositorioContato repositorioContato;
-        private ListagemCompromissoControl listagemCompromisso = new();
+        private RepositorioCompromisso repositorioCompromisso;
+        ListagemCompromissoControl listagemCompromisso;
 
-        public ControladorCompromisso(RepositorioCompromisso repositorioCompromisso, RepositorioContato repositorioContato)
+        public ControladorCompromisso(RepositorioContato repositorioContato, RepositorioCompromisso repositorioCompromisso)
         {
-            this.repositorioCompromisso = repositorioCompromisso;
             this.repositorioContato = repositorioContato;
+            this.repositorioCompromisso = repositorioCompromisso;
         }
 
-        public override string ToolTipInserir { get { return "Inserir novo Compromisso"; } }
+        public override string ToolTipInserir => "Inserir novo Compromisso";
 
-        public override string ToolTipEditar { get { return "Editar um Compromisso existente"; } }
+        public override string ToolTipEditar => "Editar Compromisso existente";
 
-        public override string ToolTipExcluir { get { return "Editar um Compromisso existente"; } }
+        public override string ToolTipExcluir => "Excluir Compromisso existente";
+
+        public override string ToolTipFiltrar => "Filtrar Compromissos";
+
+        public override bool FiltrarHabilitado => true;
 
         public override void Inserir()
         {
-            TelaCompromissoForm telaCompromisso = new(repositorioContato.SelecionarTodos());
+            List<Contato> contatos = repositorioContato.SelecionarTodos();
+            TelaCompromissoForm telaCompromisso = new TelaCompromissoForm(contatos);
 
             DialogResult opcaoEscolhida = telaCompromisso.ShowDialog();
 
             if (opcaoEscolhida == DialogResult.OK)
             {
-                Compromisso compromisso = telaCompromisso.Compromisso;
+                Compromisso compromisso = telaCompromisso.ObterCompromisso();
 
                 repositorioCompromisso.Inserir(compromisso);
 
@@ -45,26 +44,27 @@ namespace e_Agenda.ModuloCompromisso
 
         public override void Editar()
         {
-            Compromisso compromisso = listagemCompromisso.ObterCompromissoSelecionado();
+            Compromisso compromissoSelecionado = listagemCompromisso.ObterCompromissoSelecionado();
 
-            if (compromisso == null)
+            if (compromissoSelecionado == null)
             {
-                MessageBox.Show($"Selecione um compromisso primeiro!",
-                    "Edição de Compromissos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                MessageBox.Show($"Selecione um compromisso primeiro!", "Edição de Compromissos", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 return;
             }
 
-            TelaCompromissoForm telaCompromisso = new TelaCompromissoForm(repositorioContato.SelecionarTodos());
-            telaCompromisso.Compromisso = compromisso;
+            List<Contato> contatos = repositorioContato.SelecionarTodos();
+            TelaCompromissoForm telaCompromisso = new TelaCompromissoForm(contatos);
+
+            telaCompromisso.ConfigurarTela(compromissoSelecionado);
 
             DialogResult opcaoEscolhida = telaCompromisso.ShowDialog();
 
             if (opcaoEscolhida == DialogResult.OK)
             {
-                repositorioCompromisso.Editar(telaCompromisso.Compromisso);
+                Compromisso compromisso = telaCompromisso.ObterCompromisso();
+
+                repositorioCompromisso.Editar(compromisso.id, compromisso);
 
                 CarregarCompromissos();
             }
@@ -72,24 +72,20 @@ namespace e_Agenda.ModuloCompromisso
 
         public override void Excluir()
         {
-            Compromisso compromisso = listagemCompromisso.ObterCompromissoSelecionado();
+            Compromisso compromissoSelecionado = listagemCompromisso.ObterCompromissoSelecionado();
 
-            if (compromisso == null)
+            if (compromissoSelecionado == null)
             {
-                MessageBox.Show($"Selecione um compromisso primeiro!",
-                    "Exclusão de Compromissos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                MessageBox.Show($"Selecione um compromisso primeiro!", "Exclusão de Compromissos", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 return;
             }
 
-            DialogResult opcaoEscolhida = MessageBox.Show($"Deseja excluir o compromisso {compromisso.assunto}?", "Exclusão de Compromissos",
-                MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            DialogResult opcaoEscolhida = MessageBox.Show($"Deseja excluir o compromisso {compromissoSelecionado.assunto}?", "Exclusão de Compromissos", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
             if (opcaoEscolhida == DialogResult.OK)
             {
-                repositorioCompromisso.Excluir(compromisso);
+                repositorioCompromisso.Excluir(compromissoSelecionado);
 
                 CarregarCompromissos();
             }
@@ -97,20 +93,48 @@ namespace e_Agenda.ModuloCompromisso
 
         public override void Filtrar()
         {
-            throw new NotImplementedException();
+            TelaFiltroCompromissoForm telaFiltro = new TelaFiltroCompromissoForm();
+            DialogResult opcaoEscolhida = telaFiltro.ShowDialog();
+
+            if (opcaoEscolhida == DialogResult.OK)
+            {
+                StatusCompromissoEnum status = telaFiltro.ObterStatus();
+                List<Compromisso> compromissos = null;
+
+                if (status == StatusCompromissoEnum.Todos)
+                {
+                    compromissos = repositorioCompromisso.SelecionarTodos();
+                }
+
+                else if (status == StatusCompromissoEnum.Passados)
+                {
+                    compromissos = repositorioCompromisso.SelecionarCompromissosPassados(DateTime.Now);
+                }
+                else if (status == StatusCompromissoEnum.Futuros)
+                {
+                    DateTime dataInicio = telaFiltro.ObterDataInicio();
+                    DateTime dataFinal = telaFiltro.ObterDataFinal();
+
+                    compromissos = repositorioCompromisso.SelecionarCompromissosFuturos(dataInicio, dataFinal);
+                }
+
+                CarregarCompromissos(compromissos);
+
+                TelaPrincipalForm.Instancia.AtualizarRodape($"Visualizando {compromissos.Count} compromissos");
+            }
         }
 
-        private void CarregarCompromissos()
+        private void CarregarCompromissos(List<Compromisso> compromissos)
         {
-            List<Compromisso> compromissos = repositorioCompromisso.SelecionarTodos();
-
             listagemCompromisso.AtualizarRegistros(compromissos);
         }
 
         public override UserControl ObterListagem()
         {
             if (listagemCompromisso == null)
+            {
                 listagemCompromisso = new ListagemCompromissoControl();
+            }
 
             CarregarCompromissos();
 
@@ -120,6 +144,13 @@ namespace e_Agenda.ModuloCompromisso
         public override string ObterTipoCadastro()
         {
             return "Cadastro de Compromissos";
+        }
+
+        private void CarregarCompromissos()
+        {
+            List<Compromisso> compromissos = repositorioCompromisso.SelecionarTodos();
+
+            listagemCompromisso.AtualizarRegistros(compromissos);
         }
     }
 }

@@ -1,100 +1,114 @@
-﻿using e_Agenda.ModuloContato;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using e_Agenda.Compartilhado;
+using e_Agenda.ModuloContato;
+using System.Xml.Linq;
 
 namespace e_Agenda.Modulo_Compromissos
 {
     public partial class TelaCompromissoForm : Form
     {
-        private Compromisso compromisso;
-
-        private List<Contato> contatos;
-
         public TelaCompromissoForm(List<Contato> contatos)
         {
             InitializeComponent();
 
-            this.contatos = contatos;
+            this.ConfigurarDialog();
 
-            AdicionaItensComboBox(contatos);
+            CarregarContatos(contatos);
         }
 
-        private void AdicionaItensComboBox(List<Contato> contatos)
+        private void CarregarContatos(List<Contato> contatos)
         {
             foreach (Contato item in contatos)
             {
-                comboBox_contato.Items.Add(item.nome);
+                comboBox_contato.Items.Add(item);
             }
         }
 
-        public Compromisso Compromisso
+        public Compromisso ObterCompromisso()
         {
-            set
+            int id = Convert.ToInt32(tf_id.Text);
+            string assunto = tf_assunto.Text;
+
+            DateTime data = dtp_data.Value;
+
+            TimeSpan horarioInicio = dtp_inicio.Value.TimeOfDay;
+            TimeSpan horarioFinal = dtp_final.Value.TimeOfDay;
+
+            TipoLocalEnum tipo = rb_remoto.Checked ? TipoLocalEnum.Online : TipoLocalEnum.Presencial;
+
+            Contato contato = (Contato)comboBox_contato.SelectedItem;
+
+            string local;
+            if (rb_remoto.Checked) local = tf_localRemoto.Text;
+            else local = tf_localPresencial.Text;
+
+            Compromisso compromisso = new Compromisso(id, assunto, data, horarioInicio, horarioFinal, contato, local, tipo);
+
+            return compromisso;
+        }
+
+        public void ConfigurarTela(Compromisso compromissoSelecionado)
+        {
+            tf_id.Text = compromissoSelecionado.id.ToString();
+            tf_assunto.Text = compromissoSelecionado.assunto;
+            dtp_data.Value = compromissoSelecionado.data;
+            dtp_inicio.Value = DateTime.Now.Date.Add(compromissoSelecionado.horarioInicio);
+            dtp_final.Value = DateTime.Now.Date.Add(compromissoSelecionado.horarioFinal);
+
+            if (compromissoSelecionado.contato != null)
             {
-                tf_id.Text = value.id.ToString();
-                tf_assunto.Text = value.assunto;
-                dtp_data.Text = value.data.ToString();
-                dtp_inicio.Text = value.inicio.ToString();
-                dtp_termino.Text = value.termino.ToString();
-                comboBox_contato.Text = value.contato.ToString();
-                tf_local.Text = value.local;
+                checkBox_compromisso.Checked = true;
+                comboBox_contato.SelectedItem = compromissoSelecionado.contato;
             }
-            get
+
+            if (compromissoSelecionado.tipoLocal == TipoLocalEnum.Presencial)
             {
-                return compromisso;
+                rb_presencial.Checked = true;
+                tf_localPresencial.Text = compromissoSelecionado.localPresencial;
+            }
+            else
+            {
+                rb_remoto.Checked = true;
+                tf_localRemoto.Text = compromissoSelecionado.localOnline;
             }
         }
 
         private void bt_salvar_Click(object sender, EventArgs e)
         {
-            string assunto = tf_assunto.Text;
+            Compromisso compromisso = ObterCompromisso();
 
-            DateTime data = dtp_data.Value;
+            string[] erros = compromisso.Validar();
 
-            TimeSpan inicio = dtp_inicio.Value.TimeOfDay;
-
-            TimeSpan termino = dtp_termino.Value.TimeOfDay;
-
-            string local;
-
-            if (rb_presencial.Checked)
-                local = "Presencial: " + tf_local.Text;
-            else
-                local = "Remoto: " + tf_local.Text;
-
-            Contato contato;
-
-            if (checkBox_compromisso.Checked)
+            if (erros.Length > 0)
             {
-                string nomeDoContato = comboBox_contato.Text;
+                TelaPrincipalForm.Instancia.AtualizarRodape(erros[0]);
 
-                foreach (Contato c in contatos)
-                    if (c.nome == nomeDoContato)
-                    {
-                        contato = c;
-                        compromisso = new(assunto, data, inicio, termino, contato, local);
-                        break;
-                    }
+                DialogResult = DialogResult.None;
             }
-            else
-            {
-                compromisso = new(assunto, data, inicio, termino, local);
-            }
-
-            if (tf_id.Text != "0")
-                compromisso.id = Convert.ToInt32(tf_id.Text);
         }
 
         private void bt_cancelar_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void rb_presencial_CheckedChanged(object sender, EventArgs e)
+        {
+            tf_localPresencial.Enabled = true;
+            tf_localRemoto.Enabled = false;
+            tf_localRemoto.Text = "";
+        }
+
+        private void rb_remoto_CheckedChanged(object sender, EventArgs e)
+        {
+            tf_localRemoto.Enabled = true;
+            tf_localPresencial.Enabled = false;
+            tf_localPresencial.Text = "";
+        }
+
+        private void checkBox_compromisso_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBox_contato.Enabled = !comboBox_contato.Enabled;
+            comboBox_contato.SelectedIndex = -1;
         }
     }
 }

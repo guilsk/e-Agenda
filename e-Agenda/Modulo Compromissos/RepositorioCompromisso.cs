@@ -1,47 +1,20 @@
-﻿using e_Agenda.ModuloContato;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace e_Agenda.Modulo_Compromissos
+﻿namespace e_Agenda.Modulo_Compromissos
 {
-    public class RepositorioCompromisso
+    public class RepositorioCompromisso : RepositorioBase<Compromisso>
     {
-        private List<Compromisso> compromissos = new();
-        private static int contador;
-
-        public void Inserir(Compromisso compromisso)
+        public RepositorioCompromisso(List<Compromisso> compromissos)
         {
-            contador++;
-            compromisso.id = contador;
-            compromissos.Add(compromisso);
+            listaRegistros = compromissos;
         }
 
-        public List<Compromisso> SelecionarTodos()
+        public List<Compromisso> SelecionarCompromissosPassados(DateTime hoje)
         {
-            return compromissos;
+            return listaRegistros.Where(x => x.data.Date < hoje.Date).ToList();
         }
 
-        public void Editar(Compromisso compromisso)
+        public List<Compromisso> SelecionarCompromissosFuturos(DateTime dataInicio, DateTime dataFinal)
         {
-            Compromisso compromissoSelecionado = SelecionarPorId(compromisso.id);
-
-            compromissoSelecionado.assunto = compromisso.assunto;
-            compromissoSelecionado.data = compromisso.data;
-            compromissoSelecionado.inicio = compromisso.inicio;
-            compromissoSelecionado.termino = compromisso.termino;
-            if (compromisso.contato != null)
-                compromissoSelecionado.contato = compromisso.contato;
-            compromissoSelecionado.local = compromisso.local;
-        }
-
-        private Compromisso SelecionarPorId(int id) => compromissos.FirstOrDefault(x => x.id == id);
-
-        public void Excluir(Compromisso compromisso)
-        {
-            compromissos.Remove(compromisso);
+            return listaRegistros.Where(x => x.data > dataInicio).Where(x => x.data < dataFinal).ToList();
         }
     }
 }

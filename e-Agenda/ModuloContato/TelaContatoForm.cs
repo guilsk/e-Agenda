@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace e_Agenda.ModuloContato
+﻿namespace e_Agenda.ModuloContato
 {
     public partial class TelaContatoForm : Form
     {
@@ -17,6 +7,8 @@ namespace e_Agenda.ModuloContato
         public TelaContatoForm()
         {
             InitializeComponent();
+
+            this.ConfigurarDialog();
         }
 
         public Contato Contato
@@ -51,12 +43,15 @@ namespace e_Agenda.ModuloContato
 
             if (tf_id.Text != "0")
                 contato.id = Convert.ToInt32(tf_id.Text);
-        }
 
-        private void bt_cancelar_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+            string[] erros = contato.Validar();
 
+            if (erros.Length > 0)
+            {
+                TelaPrincipalForm.Instancia.AtualizarRodape(erros[0]);
+
+                DialogResult = DialogResult.None;
+            }
+        }
     }
 }

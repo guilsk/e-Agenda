@@ -162,7 +162,6 @@
             bt_cancelar.TabIndex = 13;
             bt_cancelar.Text = "Cancelar";
             bt_cancelar.UseVisualStyleBackColor = true;
-            bt_cancelar.Click += bt_cancelar_Click;
             // 
             // label1
             // 
@@ -176,8 +175,10 @@
             // 
             // TelaContatoForm
             // 
+            AcceptButton = bt_salvar;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            CancelButton = bt_cancelar;
             ClientSize = new Size(628, 276);
             Controls.Add(label1);
             Controls.Add(bt_cancelar);
@@ -194,11 +195,14 @@
             Controls.Add(lb_telefone);
             Controls.Add(lb_nome);
             Controls.Add(lb_id);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "TelaContatoForm";
             ShowIcon = false;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "TelaContato";
+            TopMost = true;
             ResumeLayout(false);
             PerformLayout();
         }

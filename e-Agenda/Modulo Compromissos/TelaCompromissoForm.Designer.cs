@@ -39,14 +39,15 @@
             rb_presencial = new RadioButton();
             tf_id = new TextBox();
             tf_assunto = new TextBox();
-            tf_local = new TextBox();
+            tf_localPresencial = new TextBox();
             dtp_data = new DateTimePicker();
             dtp_inicio = new DateTimePicker();
-            dtp_termino = new DateTimePicker();
+            dtp_final = new DateTimePicker();
             comboBox_contato = new ComboBox();
             bt_cancelar = new Button();
             bt_salvar = new Button();
             groupBox1 = new GroupBox();
+            tf_localRemoto = new TextBox();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -114,28 +115,31 @@
             checkBox_compromisso.TabIndex = 6;
             checkBox_compromisso.Text = "Deseja marcar um contato neste compromisso?";
             checkBox_compromisso.UseVisualStyleBackColor = true;
+            checkBox_compromisso.CheckedChanged += checkBox_compromisso_CheckedChanged;
             // 
             // rb_remoto
             // 
             rb_remoto.AutoSize = true;
-            rb_remoto.Location = new Point(25, 27);
+            rb_remoto.Location = new Point(11, 28);
             rb_remoto.Name = "rb_remoto";
             rb_remoto.Size = new Size(70, 19);
             rb_remoto.TabIndex = 7;
             rb_remoto.TabStop = true;
             rb_remoto.Text = "Remoto:";
             rb_remoto.UseVisualStyleBackColor = true;
+            rb_remoto.CheckedChanged += rb_remoto_CheckedChanged;
             // 
             // rb_presencial
             // 
             rb_presencial.AutoSize = true;
-            rb_presencial.Location = new Point(101, 27);
+            rb_presencial.Location = new Point(11, 58);
             rb_presencial.Name = "rb_presencial";
             rb_presencial.Size = new Size(81, 19);
             rb_presencial.TabIndex = 8;
             rb_presencial.TabStop = true;
             rb_presencial.Text = "Presencial:";
             rb_presencial.UseVisualStyleBackColor = true;
+            rb_presencial.CheckedChanged += rb_presencial_CheckedChanged;
             // 
             // tf_id
             // 
@@ -151,12 +155,12 @@
             tf_assunto.Size = new Size(484, 23);
             tf_assunto.TabIndex = 11;
             // 
-            // tf_local
+            // tf_localPresencial
             // 
-            tf_local.Location = new Point(25, 52);
-            tf_local.Name = "tf_local";
-            tf_local.Size = new Size(378, 23);
-            tf_local.TabIndex = 12;
+            tf_localPresencial.Location = new Point(101, 58);
+            tf_localPresencial.Name = "tf_localPresencial";
+            tf_localPresencial.Size = new Size(302, 23);
+            tf_localPresencial.TabIndex = 12;
             // 
             // dtp_data
             // 
@@ -180,16 +184,16 @@
             dtp_inicio.TabIndex = 15;
             dtp_inicio.Value = new DateTime(2023, 5, 18, 17, 15, 0, 0);
             // 
-            // dtp_termino
+            // dtp_final
             // 
-            dtp_termino.CustomFormat = "HH:mm";
-            dtp_termino.Format = DateTimePickerFormat.Custom;
-            dtp_termino.Location = new Point(361, 181);
-            dtp_termino.Name = "dtp_termino";
-            dtp_termino.ShowUpDown = true;
-            dtp_termino.Size = new Size(200, 23);
-            dtp_termino.TabIndex = 16;
-            dtp_termino.Value = new DateTime(2023, 5, 23, 17, 59, 0, 0);
+            dtp_final.CustomFormat = "HH:mm";
+            dtp_final.Format = DateTimePickerFormat.Custom;
+            dtp_final.Location = new Point(361, 181);
+            dtp_final.Name = "dtp_final";
+            dtp_final.ShowUpDown = true;
+            dtp_final.Size = new Size(200, 23);
+            dtp_final.TabIndex = 16;
+            dtp_final.Value = new DateTime(2023, 5, 23, 17, 59, 0, 0);
             // 
             // comboBox_contato
             // 
@@ -202,18 +206,17 @@
             // bt_cancelar
             // 
             bt_cancelar.DialogResult = DialogResult.Cancel;
-            bt_cancelar.Location = new Point(475, 406);
+            bt_cancelar.Location = new Point(475, 412);
             bt_cancelar.Name = "bt_cancelar";
             bt_cancelar.Size = new Size(75, 49);
             bt_cancelar.TabIndex = 19;
             bt_cancelar.Text = "Cancelar";
             bt_cancelar.UseVisualStyleBackColor = true;
-            bt_cancelar.Click += bt_cancelar_Click;
             // 
             // bt_salvar
             // 
             bt_salvar.DialogResult = DialogResult.OK;
-            bt_salvar.Location = new Point(394, 406);
+            bt_salvar.Location = new Point(394, 412);
             bt_salvar.Name = "bt_salvar";
             bt_salvar.Size = new Size(75, 49);
             bt_salvar.TabIndex = 18;
@@ -223,26 +226,36 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(tf_local);
+            groupBox1.Controls.Add(tf_localRemoto);
+            groupBox1.Controls.Add(tf_localPresencial);
             groupBox1.Controls.Add(rb_presencial);
             groupBox1.Controls.Add(rb_remoto);
             groupBox1.Location = new Point(66, 301);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(439, 98);
+            groupBox1.Size = new Size(439, 94);
             groupBox1.TabIndex = 20;
             groupBox1.TabStop = false;
             groupBox1.Text = "Localização";
             // 
+            // tf_localRemoto
+            // 
+            tf_localRemoto.Location = new Point(101, 27);
+            tf_localRemoto.Name = "tf_localRemoto";
+            tf_localRemoto.Size = new Size(302, 23);
+            tf_localRemoto.TabIndex = 13;
+            // 
             // TelaCompromissoForm
             // 
+            AcceptButton = bt_salvar;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(586, 523);
+            CancelButton = bt_cancelar;
+            ClientSize = new Size(586, 479);
             Controls.Add(groupBox1);
             Controls.Add(bt_cancelar);
             Controls.Add(bt_salvar);
             Controls.Add(comboBox_contato);
-            Controls.Add(dtp_termino);
+            Controls.Add(dtp_final);
             Controls.Add(dtp_inicio);
             Controls.Add(dtp_data);
             Controls.Add(tf_assunto);
@@ -254,7 +267,12 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "TelaCompromissoForm";
+            ShowIcon = false;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "TelaCompromissoForm";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -275,13 +293,14 @@
         private RadioButton rb_presencial;
         private TextBox tf_id;
         private TextBox tf_assunto;
-        private TextBox tf_local;
+        private TextBox tf_localPresencial;
         private DateTimePicker dtp_data;
         private DateTimePicker dtp_inicio;
-        private DateTimePicker dtp_termino;
+        private DateTimePicker dtp_final;
         private ComboBox comboBox_contato;
         private Button bt_cancelar;
         private Button bt_salvar;
         private GroupBox groupBox1;
+        private TextBox tf_localRemoto;
     }
 }
