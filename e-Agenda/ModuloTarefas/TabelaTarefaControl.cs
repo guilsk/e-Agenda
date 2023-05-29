@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace e_Agenda.ModuloTarefas
+﻿namespace e_Agenda.ModuloTarefas
 {
     public partial class TabelaTarefaControl : UserControl
     {
@@ -18,11 +8,10 @@ namespace e_Agenda.ModuloTarefas
 
             ConfigurarColunas();
 
-            //grid.ConfigurarGridZebrado();
+            grid.ConfigurarGridZebrado();
 
-            //grid.ConfigurarGridSomenteLeitura();
+            grid.ConfigurarGridSomenteLeitura();
         }
-
 
         private void ConfigurarColunas()
         {
@@ -50,14 +39,14 @@ namespace e_Agenda.ModuloTarefas
                 }
             };
 
-            //grid.Columns.AddRange(colunas);
+            grid.Columns.AddRange(colunas);
         }
 
         public void AtualizarRegistros(List<Tarefa> tarefas)
         {
             foreach (Tarefa tarefa in tarefas)
             {
-                //grid.Rows.Add(tarefa.id, tarefa.titulo, tarefa.prioridade, tarefa.percentualConcluido);
+                grid.Rows.Add(tarefa.id, tarefa.titulo, tarefa.prioridade, tarefa.percentualConcluido);
             }
         }
 
@@ -68,7 +57,7 @@ namespace e_Agenda.ModuloTarefas
             try
             {
                 id = 0;
-                //id = Convert.ToInt32(grid.SelectedRows[0].Cells["id"].Value);
+                id = Convert.ToInt32(grid.SelectedRows[0].Cells["id"].Value);
             }
             catch
             {
