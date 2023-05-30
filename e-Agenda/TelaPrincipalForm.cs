@@ -11,7 +11,10 @@ namespace e_Agenda
         private ControladorBase controlador;
         private RepositorioContato repositorioContato = new RepositorioContato(new List<Contato>());
         private RepositorioCompromisso repositorioCompromisso = new RepositorioCompromisso(new List<Compromisso>());
-        private RepositorioTarefa repositorioTarefa = new RepositorioTarefa(new List<Tarefa>());
+
+        private IRepositorioTarefa repositorioTarefa = new RepositorioTarefaEmArquivo();
+
+        //private IRepositorioTarefa repositorioTarefa = new RepositorioTarefaEmMemoria(new List<Tarefa>());
 
         private static TelaPrincipalForm telaPrincipal;
 
@@ -135,6 +138,11 @@ namespace e_Agenda
             ConfigurarTelaPrincipal(controlador);
         }
 
+        private void MenuItemDespesas_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void ConfigurarTelaPrincipal(ControladorBase controlador)
         {
             lb_tipoCadastro.Text = controlador.ObterTipoCadastro();
@@ -214,5 +222,7 @@ namespace e_Agenda
         {
             controlador.ConcluirItens();
         }
+
+        
     }
 }

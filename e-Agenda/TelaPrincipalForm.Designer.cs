@@ -75,21 +75,21 @@
             // MenuItemContato
             // 
             MenuItemContato.Name = "MenuItemContato";
-            MenuItemContato.Size = new Size(149, 22);
+            MenuItemContato.Size = new Size(180, 22);
             MenuItemContato.Text = "Contato";
             MenuItemContato.Click += MenuItemContato_Click;
             // 
             // MenuItemCompromisso
             // 
             MenuItemCompromisso.Name = "MenuItemCompromisso";
-            MenuItemCompromisso.Size = new Size(149, 22);
+            MenuItemCompromisso.Size = new Size(180, 22);
             MenuItemCompromisso.Text = "Compromisso";
             MenuItemCompromisso.Click += MenuItemCompromisso_Click;
             // 
             // MenuItemTarefas
             // 
             MenuItemTarefas.Name = "MenuItemTarefas";
-            MenuItemTarefas.Size = new Size(149, 22);
+            MenuItemTarefas.Size = new Size(180, 22);
             MenuItemTarefas.Text = "Tarefas";
             MenuItemTarefas.Click += MenuItemTarefas_Click;
             // 
@@ -97,19 +97,20 @@
             // 
             despesasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { MenuItemDespesas, MenuItemCategorias });
             despesasToolStripMenuItem.Name = "despesasToolStripMenuItem";
-            despesasToolStripMenuItem.Size = new Size(149, 22);
+            despesasToolStripMenuItem.Size = new Size(180, 22);
             despesasToolStripMenuItem.Text = "Despesas";
             // 
             // MenuItemDespesas
             // 
             MenuItemDespesas.Name = "MenuItemDespesas";
-            MenuItemDespesas.Size = new Size(130, 22);
+            MenuItemDespesas.Size = new Size(180, 22);
             MenuItemDespesas.Text = "Despesas";
+            MenuItemDespesas.Click += MenuItemDespesas_Click;
             // 
             // MenuItemCategorias
             // 
             MenuItemCategorias.Name = "MenuItemCategorias";
-            MenuItemCategorias.Size = new Size(130, 22);
+            MenuItemCategorias.Size = new Size(180, 22);
             MenuItemCategorias.Text = "Categorias";
             // 
             // MenuItemRelatorios
