@@ -1,4 +1,3 @@
-using e_Agenda.Compartilhado;
 using e_Agenda.Modulo_Compromissos;
 using e_Agenda.ModuloCompromisso;
 using e_Agenda.ModuloContato;
@@ -9,12 +8,11 @@ namespace e_Agenda
     public partial class TelaPrincipalForm : Form
     {
         private ControladorBase controlador;
-        private RepositorioContato repositorioContato = new RepositorioContato(new List<Contato>());
-        private RepositorioCompromisso repositorioCompromisso = new RepositorioCompromisso(new List<Compromisso>());
+
+        private IRepositorioContato repositorioContato = new RepositorioArquivoContato();
+        private IRepositorioCompromisso repositorioCompromisso = new RepositorioArquivoCompromisso();
 
         private IRepositorioTarefa repositorioTarefa = new RepositorioTarefaEmArquivo();
-
-        //private IRepositorioTarefa repositorioTarefa = new RepositorioTarefaEmMemoria(new List<Tarefa>());
 
         private static TelaPrincipalForm telaPrincipal;
 

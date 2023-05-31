@@ -1,8 +1,8 @@
 ﻿namespace e_Agenda.Modulo_Compromissos
 {
-    public class RepositorioCompromisso : RepositorioBase<Compromisso>
+    public class RepositorioMemoriaCompromisso : RepositorioMemoriaBase<Compromisso>
     {
-        public RepositorioCompromisso(List<Compromisso> compromissos)
+        public RepositorioMemoriaCompromisso(List<Compromisso> compromissos)
         {
             listaRegistros = compromissos;
         }

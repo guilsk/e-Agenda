@@ -2,6 +2,7 @@
 
 namespace e_Agenda.Modulo_Compromissos
 {
+    [Serializable]
     public class Compromisso : EntidadeBase<Compromisso>
     {
         public string assunto;
@@ -12,6 +13,8 @@ namespace e_Agenda.Modulo_Compromissos
         public string localPresencial;
         public string localOnline;
         public TipoLocalEnum tipoLocal;
+
+        public Compromisso(){}
 
         public Compromisso(string assunto, DateTime data, TimeSpan horarioInicio, TimeSpan horarioFinal, Contato contato, string local, TipoLocalEnum tipoLocal)
         {
