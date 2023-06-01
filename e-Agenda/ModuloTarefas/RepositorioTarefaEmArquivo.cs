@@ -1,30 +1,32 @@
-﻿namespace e_Agenda.ModuloTarefas
+﻿using e_Agenda.Compartilhado;
+
+namespace e_Agenda.ModuloTarefas
 {
     public class RepositorioTarefaEmArquivo : RepositorioArquivoBase<Tarefa>, IRepositorioTarefa
     {
-        private const string NOME_ARQUIVO_TAREFAS = "Tarefas.bin";
-        Tarefa tarefa = new Tarefa();
-
-        public RepositorioTarefaEmArquivo()
+        public RepositorioTarefaEmArquivo(ContextoDados contexto) : base(contexto)
         {
-            if (File.Exists(NOME_ARQUIVO_TAREFAS))
-                CarregarRegistrosDoArquivo(tarefa);
         }
 
         public List<Tarefa> SelecionarConcluidas()
         {
-            return listaRegistros.Where(x => x.percentualConcluido == 100).ToList();
+            return ObterRegistros().Where(x => x.percentualConcluido == 100).ToList();
         }
 
         public List<Tarefa> SelecionarPendentes()
         {
-            return listaRegistros.Where(x => x.percentualConcluido < 100).ToList();
+            return ObterRegistros()
+                    .Where(x => x.percentualConcluido < 100).ToList();
         }
 
         public List<Tarefa> SelecionarTodosOrdenadosPorPrioridade()
         {
-            return listaRegistros.OrderByDescending(x => x.prioridade).ToList();
+            return ObterRegistros().OrderByDescending(x => x.prioridade).ToList();
         }
 
+        protected override List<Tarefa> ObterRegistros()
+        {
+            return contextoDados.tarefas;
+        }
     }
 }

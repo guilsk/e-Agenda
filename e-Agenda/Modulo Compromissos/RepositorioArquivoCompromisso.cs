@@ -1,24 +1,26 @@
-﻿namespace e_Agenda.Modulo_Compromissos
-{
-    public class RepositorioArquivoCompromisso : RepositorioArquivoBase<Compromisso>, IRepositorioCompromisso
-    {
-        private const string NOME_ARQUIVO_CONTATOS = "Compromisso.bin";
-        Compromisso compromisso = new Compromisso();
+﻿using e_Agenda.Compartilhado;
 
-        public RepositorioArquivoCompromisso()
+namespace e_Agenda.Modulo_Compromissos
+{
+    public class RepositorioCompromissoArquivo : RepositorioArquivoBase<Compromisso>, IRepositorioCompromisso
+    {
+        public RepositorioCompromissoArquivo(ContextoDados contexto) : base(contexto)
         {
-            if (File.Exists(NOME_ARQUIVO_CONTATOS))
-                CarregarRegistrosDoArquivo(compromisso);
         }
 
         public List<Compromisso> SelecionarCompromissosPassados(DateTime hoje)
         {
-            return listaRegistros.Where(x => x.data.Date < hoje.Date).ToList();
+            return ObterRegistros().Where(x => x.data.Date < hoje.Date).ToList();
         }
 
         public List<Compromisso> SelecionarCompromissosFuturos(DateTime dataInicio, DateTime dataFinal)
         {
-            return listaRegistros.Where(x => x.data > dataInicio).Where(x => x.data < dataFinal).ToList();
+            return ObterRegistros().Where(x => x.data > dataInicio).Where(x => x.data < dataFinal).ToList();
+        }
+
+        protected override List<Compromisso> ObterRegistros()
+        {
+            return contextoDados.compromissos;
         }
     }
 }

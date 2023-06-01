@@ -1,86 +1,64 @@
-﻿using System.Runtime.Serialization.Formatters.Binary;
-
-
-namespace e_Agenda.Compartilhado
+﻿namespace e_Agenda.Compartilhado
 {
-    public class RepositorioArquivoBase<TEntidade> where TEntidade : EntidadeBase<TEntidade>
+    public abstract class RepositorioArquivoBase<T> where T : EntidadeBase<T>
     {
-        protected int contadorRegistros = 0;
-        protected List<TEntidade> listaRegistros = new List<TEntidade>();
+        protected ContextoDados contextoDados;
+        private int contador;
 
-        public void CarregarRegistrosDoArquivo(TEntidade registro)
+        public RepositorioArquivoBase(ContextoDados contexto)
         {
-            string caminho = typeof(TEntidade).Name + ".bin";
-
-            BinaryFormatter serializador = new BinaryFormatter();
-
-            byte[] registrosEmBytes = File.ReadAllBytes(caminho);
-
-            MemoryStream registroStream = new MemoryStream(registrosEmBytes);
-
-            listaRegistros = (List<TEntidade>)serializador.Deserialize(registroStream);
+            contextoDados = contexto;
 
             AtualizarContador();
         }
 
-        public void AtualizarContador()
+        protected abstract List<T> ObterRegistros();
+
+        public void Inserir(T novoRegistro)
         {
-            contadorRegistros = listaRegistros.Max(x => x.id);
+            List<T> registros = ObterRegistros();
+
+            contador++;
+            novoRegistro.id = contador;
+            registros.Add(novoRegistro);
+
+            contextoDados.GravarEmArquivoJson();
         }
 
-        public void GravarTarefasEmArquivo(TEntidade registro)
+        public void Editar(int id, T registroAtualizado)
         {
-            string caminho = typeof(TEntidade).Name + ".bin";
+            T registroSelecionado = SelecionarPorId(id);
 
-            BinaryFormatter serializador = new BinaryFormatter();
+            registroSelecionado.AtualizarInformacoes(registroAtualizado);
 
-            MemoryStream registroStream = new MemoryStream();
-
-            serializador.Serialize(registroStream, listaRegistros);
-
-            byte[] registrosEmBytes = registroStream.ToArray();
-
-            File.WriteAllBytes(caminho, registrosEmBytes);
+            contextoDados.GravarEmArquivoJson();
         }
 
-        public void Editar(int id, TEntidade registro)
+        public void Excluir(T registroSelecionado)
         {
-            TEntidade registroSelecionado = SelecionarPorId(id);
+            List<T> registros = ObterRegistros();
 
-            registroSelecionado.AtualizarInformacoes(registro);
+            registros.Remove(registroSelecionado);
 
-            GravarTarefasEmArquivo(registro);
+            contextoDados.GravarEmArquivoJson();
         }
 
-        public void Excluir(TEntidade registroSelecionado)
+        public T SelecionarPorId(int id)
         {
-            listaRegistros.Remove(registroSelecionado);
+            List<T> registros = ObterRegistros();
 
-            GravarTarefasEmArquivo(registroSelecionado);
+            return registros.FirstOrDefault(x => x.id == id);
         }
 
-        public void Inserir(TEntidade novoRegistro)
+        public List<T> SelecionarTodos()
         {
-            contadorRegistros++;
-            novoRegistro.id = contadorRegistros;
-            listaRegistros.Add(novoRegistro);
-
-            GravarTarefasEmArquivo(novoRegistro);
+            return ObterRegistros();
         }
 
-        public TEntidade SelecionarPorId(int id)
+        private void AtualizarContador()
         {
-            TEntidade registro = listaRegistros.FirstOrDefault(x => x.id == id);
-
-            return registro;
+            if (ObterRegistros().Count > 0)
+                contador = ObterRegistros().Max(x => x.id);
         }
-
-        public List<TEntidade> SelecionarTodos()
-        {
-            return listaRegistros;
-        }
-
-        
-    
     }
 }

@@ -2,13 +2,14 @@
 {
     public class RepositorioArquivoContato : RepositorioArquivoBase<Contato>, IRepositorioContato
     {
-        private const string NOME_ARQUIVO_CONTATOS = "Contato.bin";
-        Contato contato = new Contato();
-
-        public RepositorioArquivoContato()
+        public RepositorioArquivoContato(ContextoDados contexto) : base(contexto)
         {
-            if (File.Exists(NOME_ARQUIVO_CONTATOS))
-                CarregarRegistrosDoArquivo(contato);
+
+        }
+
+        protected override List<Contato> ObterRegistros()
+        {
+            return contextoDados.contatos;
         }
     }
 }

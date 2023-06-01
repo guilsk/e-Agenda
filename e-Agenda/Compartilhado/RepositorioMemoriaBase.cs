@@ -51,5 +51,10 @@
         {
             return listaRegistros.OrderByDescending(x => x.id).ToList();
         }
+
+        public int ObterQuantidade()
+        {
+            return listaRegistros.Count;
+        }
     }
 }
